@@ -30,6 +30,11 @@ pip uninstall jupyterlab-remote-contents
 
 ## Usage
 
+In JupyterLab, click on the list icon "Remote Contents (not connected)" on the left panel, then click on the folder icon "Connect to Jupyter Server".
+You should be prompted to enter the Jupyter server URL. Enter e.g. "http://127.0.0.1:8000/?token=87b..." (don't forget the token if you have one). If you hover over the icon on the left panel, you should now see something like "Remote Contents at http://127.0.0.1:8000/" (instead of "not connected").
+
+## CORS
+
 Since remote contents are fetched from another origin than the client's, you may run into
 [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) issues.
 The Jupyter server serving the remote contents API must support the client's origin.
@@ -40,14 +45,23 @@ For instance, if you launch JupyterLab with:
 jupyter lab --ServerApp.ip='127.0.0.1' --ServerApp.port=8888
 ```
 
-Then you must pass `--ServerApp.allow_origin='http://127.0.0.1:8888'` to the Jupyter server serving the contents API:
+Then do the following, depending on whether you use
+[jupyter-server](https://github.com/jupyter-server/jupyter_server) or
+[jupyverse](https://github.com/jupyter-server/jupyverse) to serve the contents API.
+
+### jupyter-server
 
 ```bash
+# pip install jupyter-server
 jupyter server --ServerApp.ip='127.0.0.1' --ServerApp.port=8000 --ServerApp.allow_origin='http://127.0.0.1:8888'
 ```
 
-In JupyterLab, click on the list icon "Remote Contents (not connected)" on the left panel, then click on the folder icon "Connect to Jupyter Server".
-You should be prompted to enter the Jupyter server URL. Enter e.g. "http://127.0.0.1:8000/?token=87b..." (don't forget the token if you have one). If you hover over the icon on the left panel, you should now see something like "Remote Contents at http://127.0.0.1:8000/" (instead of "not connected").
+### jupyverse
+
+```bash
+# pip install fps-contents fps-auth fps-frontend
+jupyverse --host 127.0.0.1 --port 8000 --allow-origin http://127.0.0.1:8888
+```
 
 ## Contributing
 
