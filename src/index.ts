@@ -5,11 +5,12 @@ import {
 
 import { ToolbarButton } from '@jupyterlab/apputils';
 
-import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
+import { IFileBrowserFactory, Uploader } from '@jupyterlab/filebrowser';
 
 import { ITranslator } from '@jupyterlab/translation';
 
-import { listIcon, folderIcon } from '@jupyterlab/ui-components';
+import { listIcon, folderIcon, newFolderIcon, refreshIcon } from '@jupyterlab/ui-components';
+// import { FilenameSearcher, IScore, listIcon, folderIcon, newFolderIcon, refreshIcon } from '@jupyterlab/ui-components';
 
 import { ServerConnection } from './serverconnection';
 
@@ -68,7 +69,43 @@ const plugin: JupyterFrontEndPlugin<void> = {
       tooltip: trans.__('Connect to Jupyter Server')
     });
 
+    const createNewDirectoryButton = new ToolbarButton({
+      icon: newFolderIcon,
+      onClick: async () => {
+        widget.createNewDirectory();
+      },
+      tooltip: trans.__('New Folder')
+    });
+
+    const uploader = new Uploader({ model: widget.model, translator });
+
+    const refreshButton = new ToolbarButton({
+      icon: refreshIcon,
+      onClick: async () => {
+        widget.model.refresh();
+      },
+      tooltip: trans.__('Refresh File Browser')
+    });
+
+    // const searcher = FilenameSearcher({
+    //   updateFilter: (
+    //     filterFn: (item: string) => Partial<IScore> | null,
+    //     query?: string
+    //   ) => {
+    //     widget.model.setFilter(value => {
+    //       return filterFn(value.name.toLowerCase());
+    //     });
+    //   },
+    //   useFuzzyFilter: true,
+    //   placeholder: trans.__('Filter files by name'),
+    //   forceRefresh: true
+    // });
+
     widget.toolbar.insertItem(0, 'connect-to-server', connectToServerButton);
+    widget.toolbar.insertItem(1, 'create-new-directory', createNewDirectoryButton);
+    widget.toolbar.insertItem(2, 'upload', uploader);
+    widget.toolbar.insertItem(3, 'refresh', refreshButton);
+    // widget.toolbar.insertItem(4, 'search', searcher);
 
     app.shell.add(widget, 'left');
   }
