@@ -30,9 +30,11 @@ pip uninstall jupyterlab-remote-contents
 
 ## Usage
 
-The Jupyter server serving the remote contents API must support the client from the origin of the Jupyter server serving the rest of the API.
+Since remote contents are fetched from another origin than the client's, you may run into
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) issues.
+The Jupyter server serving the remote contents API must support the client's origin.
 
-For instance, if you launch JupyterLab (or JupyterLite) with:
+For instance, if you launch JupyterLab with:
 
 ```bash
 jupyter lab --ServerApp.ip='127.0.0.1' --ServerApp.port=8888
@@ -44,9 +46,8 @@ Then you must pass `--ServerApp.allow_origin='http://127.0.0.1:8888'` to the Jup
 jupyter server --ServerApp.ip='127.0.0.1' --ServerApp.port=8000 --ServerApp.allow_origin='http://127.0.0.1:8888'
 ```
 
-In JupyterLab, click `Remote Contents (not connected)` on the left panel, then click on the folder icon `Connect to Jupyter Server`.
-You should be prompted to enter the Jupyter server URL. Enter e.g. `http://127.0.0.1:8000/?token=87b355dd7a53f5bbe05a159239c93c9183ee12f9fe67f071` (don't forget the token if you have one). If you hover over the icon on the left
-panel, you should now see something like `Remote Contents at http://127.0.0.1:8000/` (instead of `(not connected)`).
+In JupyterLab, click on the list icon "Remote Contents (not connected)" on the left panel, then click on the folder icon "Connect to Jupyter Server".
+You should be prompted to enter the Jupyter server URL. Enter e.g. "http://127.0.0.1:8000/?token=87b..." (don't forget the token if you have one). If you hover over the icon on the left panel, you should now see something like "Remote Contents at http://127.0.0.1:8000/" (instead of "not connected").
 
 ## Contributing
 
